@@ -1,0 +1,276 @@
+/* THIS CONTROLLS AND MANAGE OUR PADDING FOR US */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background-color: rgb(218, 213, 213);
+    text-align: center;
+    
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+header{
+    background-color: rgb(163, 159, 159);
+    text-align: center;
+    padding: 20px;
+    color: white;
+}
+
+header h1 {
+    font-size: 2.5vw;
+}
+
+nav {
+    background-color: rgb(49, 45, 45);
+    height: 50px;
+    
+    /* RESPONSIBLE FOR SPACE AROUND TEXT, AND ARRANGMENT OF TEXT */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    font-size: 1.1vw;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+
+    padding: 1vw;
+    width: 100%;
+    &:hover {
+        color: rgb(218, 215, 215);
+        background-color: #4d4a4a;
+    }
+    &:active {
+        color: rgb(255, 255, 255);
+    }
+}
+
+#logout {
+    color: rgb(241, 134, 134);
+    font-weight: bold;
+
+
+    &:hover {
+        color: rgb(245, 75, 75);
+        background-color: #4d4a4a;
+    }
+    &:active {
+        color: rgb(250, 0, 0);
+    }
+}
+
+
+
+main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background-color: rgb(218, 213, 213);
+    padding: 10px;
+}
+
+main .container {
+    background-color: #b6b6b6;
+    border-radius: 5px;
+    padding: 10px;
+    margin-top: 0.5vw;
+    text-align: center;
+}
+
+main .container form {
+    padding: 5px;
+}
+
+main .container form label{
+    font-size: 1vw;
+}
+
+main .container #title {
+    font-weight: bolder;
+    font-size: 1.2vw;
+}
+
+main .container form .chose {
+    margin-top: 1vw;
+    display: flex;
+}
+
+main .container form .chose input {
+    height: 1.4vw;
+}
+
+
+
+main .container form input{
+    border: none;
+    height: 2.5vw;
+    background-color: #919191;
+    color: white;
+    border-radius: 5px;
+    padding: 5px;
+    margin: 1px;
+    text-align: center;
+    width: 90%;
+    margin-bottom: 0.7vw;
+
+    &::placeholder {
+        color: #ffffff;
+    }
+}
+
+main .container form #reset_Btn{
+    border: none;
+    background-color: #f1e427;
+    color: rgb(0, 0, 0);
+    height: 3vw;
+    margin-bottom: 0.5vw;
+
+    &:hover {
+        background-color: #f1e53e;
+    }
+    &:active {
+        background-color: #e6d816;
+    }
+}
+
+main .container form #submit_Btn{
+    border: none;
+    background-color: #2785f1;
+    color: white;
+    height: 3vw;
+    margin-bottom: 0vw;
+
+    &:hover {
+        background-color: #278afc; 
+    }
+    &:active {
+        background-color: #004492;
+    }
+}
+
+
+
+
+
+footer{
+    /* THIS CLEARS THE "float: left;" FROM APPLING HERE */
+    display: block;
+    clear: both;
+
+    background-color: rgb(187, 185, 185);
+    text-align: center;
+    padding: 25px;
+    font-size: 1vw;
+
+    position: relative;
+    top: 100px;
+}
+
+footer h2 {
+    font-size: 1.2vw;
+}
+
+
+
+
+/* PAGE RESPONSIVINESS */
+
+@media (max-width: 650px) {
+    header h1 {
+        font-size: 5vw;
+    }
+
+    nav {
+        flex-direction: column;
+        height: 20%;
+    }
+
+    nav a{
+        font-size: 3vw;
+        padding: 2px;
+    }
+
+    main .container form {
+        margin-bottom: 0;
+    }
+
+    main .container form input {
+        height: 5vw;
+        margin: 1vw;
+        padding: 3.5vw;
+    }
+
+    main .container form #title {
+        font-size: 3.2vw;
+    }
+
+    main .container form .chose {
+        margin-top: 10px;
+        margin-bottom: 10px;
+        
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    main .container form .chose {
+        margin-top: 10px;
+        margin-bottom: 10px;
+        
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    main .container form label {
+        font-size: 2.6vw;
+    }
+
+    main .container form .chose input {
+        height: 3vw;
+    }
+
+    .container form .buttons {
+        display: flex;
+    }
+
+    .container form .buttons #reset_Btn {
+        height: 40px;
+    }
+
+    .container form .buttons #submit_Btn {
+        height: 40px;
+    }
+
+    footer h2{
+        font-size: 2.1vw;
+    }
+
+    footer{
+        font-size: 2.3vw;
+    }
+    
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
