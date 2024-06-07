@@ -6,5 +6,5 @@
 
     // LOGOUT
     session_destroy();
-    header("location: /JAYLOTET_SYS/Admin_Portal/src");
+    header("location: index.php");
 ?>
