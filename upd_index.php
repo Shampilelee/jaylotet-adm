@@ -1,7 +1,6 @@
 
 <?php
     include("database.php");
-    session_start();
 
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -83,14 +82,13 @@
 </head>
 <body>
     <header>
-        <?php echo $_SESSION["usr_name"]; ?>
         <h1>UPDATE ITEMS</h1>
     </header>
     <nav class="header_navbar">
         <a href="find_index.php">Find Products</a>
         <a href="add_index.php">Add Products</a>
         <a href="<?php htmlspecialchars($_SERVER["PHP_SELF"]) ?>">Update</a>
-        <a href="logout_index.php" id="logout">Logout</a>
+        <a href="transactions.php">Transactions</a>
     </nav>
 
 
@@ -148,7 +146,7 @@
         <h2>CONTACT</h2>
         <hr>
         author: Dhope Nation<br>
-        &copy; copyright reserved<br>
+        &copy;<span id="show_Date"></span> copyright reserved<br>
         <small><a href="mailto:yeshua.t137@gmail.com">yeshua.t137@gmail.com</a></small>
     </footer>
 
@@ -157,6 +155,11 @@
 
 
     <script>
+
+        // Footer copyright YEAR
+        const show = document.getElementById("show_Date");
+        const now = new Date().getFullYear();
+        show.textContent = now;
 
         let debounceTimeout;
         const debounce = (func, delay) => {

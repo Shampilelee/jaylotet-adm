@@ -43,7 +43,7 @@ try {
 
     // Check Connection successful, do further processing here
     if ($conn){
-        echo "YOU ARE CONNECTED ! & Open \n";
+        #echo "YOU ARE CONNECTED ! & Open \n";
     }
     
 } 
@@ -55,7 +55,7 @@ try {
     )
 */
 catch (Exception $e) {
-    echo "SORRY, COULD NOT CONNECT: ". $e->getMessage();
+    #echo "SORRY, COULD NOT CONNECT: ". $e->getMessage();
 }
 
 

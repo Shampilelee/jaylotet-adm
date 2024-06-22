@@ -2,56 +2,50 @@
 <?php
     include("database.php");
 
-    # TO BE USED FOR ERROR AND RESULT DISPLAY
     $message = "";
-    
-    # CHECKING IF FORM HAS BEING SUBMITED.
+    $time_Stamp = "";
+
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-        
-        
-        # RECEIVE AND SANITAICES RAW DATA FROM USER
-        $user_input = filter_input(INPUT_POST, "user_input", FILTER_SANITIZE_SPECIAL_CHARS);
+        $item_name = trim(filter_input(INPUT_POST, "item_name", FILTER_SANITIZE_SPECIAL_CHARS));
+        $item_cost = trim(filter_input(INPUT_POST, "item_cost", FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION));
 
-        # THIS IS THE SQL QEURY TO RETRIVE ALL DATA IN A ROW THAT, 
-        # THE '$username' ENTERED BY THE USER MATCHES WHAT IS IN THE 'username' OF THAT ROW IN MySQL.
-        $sql_code = "SELECT * FROM `items` WHERE item_name = '$user_input'";
+        $item_quantity = trim(filter_input(INPUT_POST, "item_quantity", FILTER_SANITIZE_NUMBER_INT));
+        $date_Sold = trim(filter_input(INPUT_POST, "date_sold", FILTER_SANITIZE_SPECIAL_CHARS));
+        $time_Sold = trim(filter_input(INPUT_POST, "time_sold", FILTER_SANITIZE_SPECIAL_CHARS));
         
-        # EXECUTE CODE AND STORE RESULTS IN '$get_ID'
-        $get_ID = mysqli_query($conn, $sql_code);
+        $time_Stamp = "$date_Sold $time_Sold:34";
         
-        # CHECKING IF '$username' ENTERED BY USER HAS AN ID,
-        # IF YES THEN THE USERNAME IS VALID(IN OUR DATABASE).
-        if (mysqli_num_rows($get_ID) > 0) {
+        # strpos() CHECKS IF SOMETHING CONTAINS SOMETHING.
+        if (strpos($item_cost, ".")) {
+
+            # MAKE SURE IT'S A FLOAT
+            $item__cost = floatval($item_cost);
             
-            # FETCH ALL DATA IN ROW FROM '$get_ID' IN STORE IT IN '$row'
-            $row = mysqli_fetch_assoc($get_ID);
-            $message = "item name = " .$row["item_name"] . "<br>" . "item cost = ".$row["item_cost"]  . "<br>" . "item category = ".$row["item_category"];
-
-            /*
-            # CHECKING WETHER $password PROVERDED BY USER, 
-            # BELONG TO THE SAME ID OF THE USERNAME($username) PROVIDED BY THE USER,
-            # AND MATCHES THE HASHED PASSWORD IN THAT SAME ID.
-            if (password_verify($password, $row["password"]) ) {
-                echo "<br>";
-                echo "--- PASSWORD MATCHES 🔓 ---" . "<br>";
-                
-                header("location: home_page/land.php");
+            if ($item_name && $item__cost !== false && $item_quantity) {
+                $sql_code = "INSERT INTO `transactions` (item_sold, item_cost, quantity_sold, day_sold)
+                             VALUES ('$item_name', '$item__cost', '$item_quantity', '$time_Stamp')";
+    
+                try {
+                    mysqli_query($conn, $sql_code);
+                    $message = "Transaction Registered!";
+                } catch (mysqli_sql_exception $e) {
+                    $message = "You have a problem adding transaction: " . $e->getMessage();
+                }
+            } else {
+                $message = "Please fill in all fields correctly.";
             }
-            else {
-                echo "<br>";
-                echo "PASSWORD IS NOT VALID, TRY AGAIN 🔐🔴" . "<br>";
-            }
-            */
-        }
-        else{
-            $message = "Sorry, Item Not In Our Database";
-        }
 
+        } else {
+            $message = "item cost MUST BE FLOAT";
+        }
+        
+    } else {
+        $message = "fill form";
     }
 
-
 ?>
+
 
 
 
@@ -86,37 +80,60 @@
 
 
 
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="find_style.css">
+    <link rel="stylesheet" href="update.css">
     <title>Portal</title>
 </head>
 <body>
     <header>
-        <h1>FIND PRODUCTS</h1>
+        <h1>ADD TRANSACTIONS</h1>
     </header>
-    <nav>
-        <a href="<?php htmlspecialchars($_SERVER["PHP_SELF"]) ?>">Find Products</a>
+    <nav class="header_navbar">
+        <a href="find_index.php">Find Products</a>
         <a href="add_index.php">Add Products</a>
         <a href="upd_index.php">Update</a>
-        <a href="transactions.php">Transactions</a>
+        <a href="<?php htmlspecialchars($_SERVER["PHP_SELF"]) ?>">Transactions</a>
     </nav>
-
+    
     <?php echo $message ?>
 
     <main>
+
         <div class="container">
-            <h1>Enter The Item Name</h1>
-            <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
-                <input type="text" placeholder="item name" name="user_input" id="user_input" required>
+        
+            <form action="<?php htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="POST" enctype="multipart/form-data">
+                
+                <input type="text" name="item_name" id="user_input" placeholder="Enter Item Name" required>
+                <br>
                 <ul id="suggestions"></ul>
-                <input type="submit" id="submit_Btn" value="Find">
+
+                <input type="number" name="item_cost" step="0.01" placeholder="Enter Item Price ex: 5.0" required>
+                <br>
+
+                <input type="number" name="item_quantity" placeholder="Enter Quantity" required>
+                <br>
+
+                <input type="date" name="date_sold" required><br>
+
+                <input type="time" name="time_sold" required>
+
+                <!-- THIS IS A RESET BUTTON -->
+                <div class="buttons">
+                    <input type="reset" id="reset_Btn">
+                    <input type="submit" id="submit_Btn">
+                </div>
+                
             </form>
         </div>
+        
     </main>
+
 
     <footer>
         <h2>CONTACT</h2>
@@ -130,20 +147,14 @@
 
 
 
-
-
-
-
-
-
-
     <script>
-
+        
         // Footer copyright YEAR
         const show = document.getElementById("show_Date");
         const now = new Date().getFullYear();
         show.textContent = now;
 
+        // auto-complete
         let debounceTimeout;
         const debounce = (func, delay) => {
             return function(...args) {
@@ -218,14 +229,10 @@
     </script>
 
 
+    
+    
 </body>
 </html>
-
-
-
-
-
-
 
 
 
@@ -235,22 +242,29 @@
 <?php
 
 
-
     # CLOSE CONNECTION WITH MySQL
+    
     try {
         // Check if $conn is a mysqli object
         if ($conn instanceof mysqli) {
             mysqli_close($conn);
-            # echo "<br> Database Connected ☁";
+            echo "<br> Database Connected ☁";
         } else {
             # THIS 'new Exception' WILL BE DISPLAYED AS THE NEW ERROR MESSAGE.
             throw new Exception("<br> You're Not Connected To Database. Please try again later.");
         }
     } catch (Exception $e) {
         // Display a user-friendly error message
-        #echo $e->getMessage();
+        echo $e->getMessage();
     }
 ?>
+
+
+
+
+
+
+
 
 
 
